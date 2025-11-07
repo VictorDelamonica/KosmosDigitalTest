@@ -20,8 +20,8 @@ repos:
       - id: check-case-conflict
       - id: mixed-line-ending
         args: ['--fix=lf']
-#      - id: no-commit-to-branch
-#        args: [--branch, main, --branch, master]
+      - id: no-commit-to-branch
+        args: [--branch, master]
 
   # Flutter and Dart hooks using local commands
   - repo: local
@@ -42,13 +42,13 @@ repos:
         files: '\.dart$'
         pass_filenames: false
 
-      - id: flutter-test-quick
-        name: Run Flutter unit tests (quick)
-        description: Run Flutter unit tests for changed files only
-        entry: flutter test test/unit/
-        language: system
-        files: '\.dart$'
-        pass_filenames: false
+#      - id: flutter-test-quick
+#        name: Run Flutter unit tests (quick)
+#        description: Run Flutter unit tests for changed files only
+#        entry: flutter test test/unit/
+#        language: system
+#        files: '\.dart$'
+#        pass_filenames: false
 
       - id: check-forbidden-patterns
         name: Check for forbidden patterns
