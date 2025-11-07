@@ -174,6 +174,35 @@ class _LoginViewState extends State<LoginView> {
                 ],
               ),
               CustomButton(onPressed: () {}, text: "Connexion"),
+              const SizedBox(height: 1),
+              Divider(
+                color: Colors.grey,
+                indent: 150,
+                endIndent: 150,
+                thickness: 2,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Pas de compte ?",
+                    style: TextStyle(color: Colors.grey, fontSize: 13),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/register');
+                    },
+                    child: Text(
+                      "Créé maintenant",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        decoration: TextDecoration.underline,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
