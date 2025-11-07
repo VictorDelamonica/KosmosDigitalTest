@@ -18,6 +18,7 @@ class CustomButton extends StatelessWidget {
         foregroundColor: Theme.of(context).colorScheme.onTertiary,
         minimumSize: Size(double.infinity, 50),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        maximumSize: Size(double.infinity, 50),
       ),
       child: Center(child: Text(text)),
     );

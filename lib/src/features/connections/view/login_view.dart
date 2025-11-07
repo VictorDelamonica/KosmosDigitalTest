@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:kosmos_digital_test/src/core/components/custom_button.dart';
 import 'package:kosmos_digital_test/src/core/components/custom_text_field.dart';
+import 'package:kosmos_digital_test/src/core/components/popup_modal.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -123,32 +124,11 @@ class _LoginViewState extends State<LoginView> {
                                     showDialog(
                                       context: context,
                                       builder: (_) {
-                                        return AlertDialog(
-                                          titleTextStyle: TextStyle(
-                                            fontSize: 19,
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.tertiary,
-                                          ),
-                                          title: Text("Email envoyé"),
-                                          content: Text(
-                                            "Vous avez reçu un email afin de réinitialiser votre mot de passe.",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          actions: [
-                                            CustomButton(
-                                              text: "Fermer",
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                          ],
+                                        return PopupModal(
+                                          title: "Email envoyé",
+                                          content:
+                                              "Vous avez reçu un email afin de réinitialiser votre mot de passe.",
+                                          ctaText: "Fermer",
                                         );
                                       },
                                     );

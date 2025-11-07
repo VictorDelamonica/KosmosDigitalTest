@@ -1,8 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kosmos_digital_test/src/features/connections/view/login_view.dart';
+import 'package:kosmos_digital_test/src/features/connections/view/register_details_view.dart';
+import 'package:kosmos_digital_test/src/features/connections/view/register_view.dart';
+import 'package:kosmos_digital_test/src/features/home/view/home_view.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'firebase_options.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -70,6 +79,18 @@ class MyApp extends StatelessWidget {
         switch (settings.name) {
           case '/':
             return MaterialPageRoute(builder: (context) => const LoginView());
+          case '/login':
+            return MaterialPageRoute(builder: (context) => const LoginView());
+          case '/register':
+            return MaterialPageRoute(
+              builder: (context) => const RegisterView(),
+            );
+          case '/register_details':
+            return MaterialPageRoute(
+              builder: (context) => RegisterDetailsView(),
+            );
+          case '/home':
+            return MaterialPageRoute(builder: (context) => const HomeView());
           default:
             return MaterialPageRoute(
               builder: (context) =>

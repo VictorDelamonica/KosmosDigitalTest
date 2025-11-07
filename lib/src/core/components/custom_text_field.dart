@@ -31,7 +31,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         controller: widget.emailController,
         showCursor: true,
         cursorColor: Theme.of(context).colorScheme.onPrimary,
-        obscureText: widget.obscureText,
+        obscureText: widget.obscureText ? _isObscured : false,
         decoration: InputDecoration(
           fillColor: Theme.of(context).colorScheme.surface,
           filled: true,
