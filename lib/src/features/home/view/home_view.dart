@@ -86,101 +86,181 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 ),
               ),
               for (var post in posts.reversed)
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface.withAlpha(230),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withAlpha(20),
-                        blurRadius: 4,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  margin: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Stack(
-                        alignment: Alignment.bottomLeft,
-                        children: [
-                          post.image != null
-                              ? Image.file(
-                                  File(post.image!.path),
-                                  width: double.infinity,
-                                  fit: BoxFit.fitWidth,
-                                )
-                              : SizedBox.shrink(),
-                          Container(
-                            height: 240,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Colors.black.withAlpha(0),
-                                  Colors.black.withAlpha(255),
-                                ],
-                              ),
-                            ),
-                            padding: const EdgeInsets.all(16.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              spacing: 8,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(
+                      context,
+                    ).pushNamed('/post_details', arguments: post.id);
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Stack(
+                          alignment: Alignment.bottomLeft,
+                          children: [
+                            post.image != null
+                                ? Image.file(
+                                    File(post.image!.path),
+                                    width: double.infinity,
+                                    fit: BoxFit.fitWidth,
+                                  )
+                                : SizedBox.shrink(),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(999),
-                                  child: user.profilePicture != null
-                                      ? Image.file(
-                                          File(user.profilePicture!.path),
-                                          height: 40,
-                                          width: 40,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Icon(
-                                          Icons.account_circle,
-                                          size: 32,
-                                          color: Colors.grey,
-                                        ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                Row(
                                   children: [
-                                    Row(
-                                      spacing: 8,
-                                      children: [
-                                        Text(
-                                          "${user.firstName} ${user.lastName}",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        Text(
-                                          "${DateTime.now().difference(post.createdAt).inMinutes} min",
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      post.content,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(color: Colors.grey),
+                                    Spacer(),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.menu,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Padding(
+                                              padding: const EdgeInsets.all(
+                                                24.0,
+                                              ),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                spacing: 4,
+                                                children: [
+                                                  Text(
+                                                    "Que souhaitez-vous faire ?",
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                  CustomButton(
+                                                    onPressed: () {
+                                                      ref
+                                                          .read(
+                                                            postProvider
+                                                                .notifier,
+                                                          )
+                                                          .removePost(post.id);
+                                                      Navigator.of(
+                                                        context,
+                                                      ).pop();
+                                                    },
+                                                    text: "Supprimer le post",
+                                                    color: Colors.red,
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(
+                                                        context,
+                                                      ).pop();
+                                                    },
+                                                    child: Text(
+                                                      "Annuler",
+                                                      style: TextStyle(
+                                                        color: Theme.of(
+                                                          context,
+                                                        ).colorScheme.onPrimary,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
+                                Container(
+                                  height: 240,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Colors.black.withAlpha(0),
+                                        Colors.black.withAlpha(255),
+                                      ],
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    spacing: 8,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                          999,
+                                        ),
+                                        child: user.profilePicture != null
+                                            ? Image.file(
+                                                File(user.profilePicture!.path),
+                                                height: 40,
+                                                width: 40,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Icon(
+                                                Icons.account_circle,
+                                                size: 32,
+                                                color: Colors.grey,
+                                              ),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Row(
+                                            spacing: 8,
+                                            children: [
+                                              Text(
+                                                "${user.firstName} ${user.lastName}",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Text(
+                                                "${DateTime.now().difference(post.createdAt).inMinutes} min",
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width:
+                                                MediaQuery.of(
+                                                  context,
+                                                ).size.width -
+                                                124,
+                                            child: Text(
+                                              post.content,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
             ],
