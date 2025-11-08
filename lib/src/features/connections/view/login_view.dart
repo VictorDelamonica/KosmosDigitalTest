@@ -54,7 +54,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       ),
                     ),
                     CustomTextField(
-                      emailController: emailController,
+                      textController: emailController,
                       hintText: "john.doe@gmail.com",
                       onChanged: (value) {
                         emailController.text = value;
@@ -79,7 +79,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       ),
                     ),
                     CustomTextField(
-                      emailController: passwordController,
+                      textController: passwordController,
                       hintText: "Mot de passe",
                       obscureText: true,
                       onChanged: (value) {
@@ -146,7 +146,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                         ),
                                       ),
                                       CustomTextField(
-                                        emailController: emailController,
+                                        textController: emailController,
                                         hintText: "john.doe@gmail.com",
                                       ),
                                     ],

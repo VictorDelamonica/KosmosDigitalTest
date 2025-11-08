@@ -6,6 +6,7 @@ import 'package:kosmos_digital_test/src/features/connections/view/login_view.dar
 import 'package:kosmos_digital_test/src/features/connections/view/register_details_view.dart';
 import 'package:kosmos_digital_test/src/features/connections/view/register_view.dart';
 import 'package:kosmos_digital_test/src/features/home/view/home_view.dart';
+import 'package:kosmos_digital_test/src/features/post/view/add_post.dart';
 
 import 'firebase_options.dart';
 
@@ -92,6 +93,8 @@ class MyApp extends StatelessWidget {
             );
           case '/home':
             return MaterialPageRoute(builder: (context) => const HomeView());
+          case '/add_post':
+            return MaterialPageRoute(builder: (context) => AddPost());
           default:
             return MaterialPageRoute(
               builder: (context) =>

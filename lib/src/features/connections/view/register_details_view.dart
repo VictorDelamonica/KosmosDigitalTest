@@ -49,7 +49,7 @@ class _RegisterDetailsViewState extends ConsumerState<RegisterDetailsView> {
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                   CustomTextField(
-                    emailController: lastNameController,
+                    textController: lastNameController,
                     hintText: "Ex. Doe",
                     obscureText: false,
                   ),
@@ -64,7 +64,7 @@ class _RegisterDetailsViewState extends ConsumerState<RegisterDetailsView> {
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                   CustomTextField(
-                    emailController: nameController,
+                    textController: nameController,
                     hintText: "Ex. John",
                     obscureText: false,
                   ),
@@ -141,6 +141,7 @@ class _RegisterDetailsViewState extends ConsumerState<RegisterDetailsView> {
                             );
                           },
                         );
+                        setState(() {});
                       },
                       child: _profilePicture?.path != null
                           ? ClipRRect(
@@ -175,16 +176,17 @@ class _RegisterDetailsViewState extends ConsumerState<RegisterDetailsView> {
                 ],
               ),
               CustomButton(
-                onPressed: () {
+                onPressed: () async {
                   if (nameController.text.isNotEmpty &&
                       lastNameController.text.isNotEmpty &&
                       _profilePicture != null) {
-                    user.updateUserDetails(
+                    await user.updateUserDetails(
                       firstName: nameController.text,
                       lastName: lastNameController.text,
                       profilePicture: XFile(_profilePicture!.path),
                     );
                     Navigator.pushNamedAndRemoveUntil(
+                      // ignore: use_build_context_synchronously
                       context,
                       '/home',
                       ModalRoute.withName('/'),

@@ -53,7 +53,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                   CustomTextField(
-                    emailController: emailController,
+                    textController: emailController,
                     hintText: "john.doe@gmail.com",
                     obscureText: false,
                   ),
@@ -68,7 +68,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                   CustomTextField(
-                    emailController: passwordController,
+                    textController: passwordController,
                     hintText: "Mot de passe",
                     obscureText: true,
                   ),
@@ -83,7 +83,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                   CustomTextField(
-                    emailController: confirmPasswordController,
+                    textController: confirmPasswordController,
                     hintText: "Confirmation mot de passe",
                     obscureText: true,
                   ),
