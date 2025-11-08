@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kosmos_digital_test/src/features/connections/model/user_model.dart';
+import 'package:kosmos_digital_test/src/features/connections/service/connection_service.dart';
 
 var userProvider = StateNotifierProvider<UserProvider, UserModel>(
   (ref) => UserProvider(),
@@ -52,5 +53,16 @@ class UserProvider extends StateNotifier<UserModel> {
 
   UserModel getUser() {
     return state;
+  }
+
+  void logout() {
+    state = UserModel(
+      id: '',
+      displayName: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+    );
+    ConnectionService().logout();
   }
 }

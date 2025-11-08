@@ -23,12 +23,12 @@ class ConnectionService {
     String password,
   ) async {
     if (!validateEmail(email) || !validatePassword(password)) {
-      throw Exception("Invalid email or password");
+      throw Exception("Email ou mot de passe invalide");
     }
     UserCredential userCredential = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);
     if (userCredential.user == null) {
-      throw Exception("User not found");
+      throw Exception("Utilisateur non trouvé; veuillez réessayer.");
     }
     return userCredential;
   }
@@ -43,5 +43,13 @@ class ConnectionService {
       throw Exception("Utilisateur non créé; veuillez réessayer.");
     }
     return userCredential;
+  }
+
+  void logout() {
+    FirebaseAuth.instance.signOut();
+  }
+
+  bool isUserLoggedIn() {
+    return FirebaseAuth.instance.currentUser != null;
   }
 }

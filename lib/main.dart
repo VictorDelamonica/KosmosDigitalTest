@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kosmos_digital_test/src/features/connections/view/auth_wrapper.dart';
 import 'package:kosmos_digital_test/src/features/connections/view/login_view.dart';
 import 'package:kosmos_digital_test/src/features/connections/view/register_details_view.dart';
 import 'package:kosmos_digital_test/src/features/connections/view/register_view.dart';
@@ -78,7 +79,7 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/':
-            return MaterialPageRoute(builder: (context) => const LoginView());
+            return MaterialPageRoute(builder: (context) => const AuthWrapper());
           case '/login':
             return MaterialPageRoute(builder: (context) => const LoginView());
           case '/register':

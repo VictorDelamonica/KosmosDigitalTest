@@ -3,187 +3,248 @@
 // Created by MoniK.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kosmos_digital_test/src/core/components/custom_button.dart';
 import 'package:kosmos_digital_test/src/core/components/custom_text_field.dart';
 import 'package:kosmos_digital_test/src/core/components/popup_modal.dart';
+import 'package:kosmos_digital_test/src/features/connections/provider/user_provider.dart';
+import 'package:kosmos_digital_test/src/features/connections/service/connection_service.dart';
 
-class LoginView extends StatefulWidget {
+class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  ConsumerState<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginViewState extends ConsumerState<LoginView> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  ConnectionService connectionService = ConnectionService();
+
+  String? _errorMessage;
+
   @override
   Widget build(BuildContext context) {
+    var user = ref.watch(userProvider.notifier);
     return Scaffold(
       appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.primary),
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-          child: Column(
-            spacing: 24,
-            children: [
-              Text(
-                "Connectez-vous ou\ncréez un compte.",
-                style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
-              ),
-              Column(
-                spacing: 3,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Adresse e-mail",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                  ),
-                  CustomTextField(
-                    emailController: emailController,
-                    hintText: "john.doe@gmail.com",
-                    obscureText: true,
-                  ),
-                ],
-              ),
-              Column(
-                spacing: 3,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Mot de passe",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                  ),
-                  CustomTextField(
-                    emailController: passwordController,
-                    hintText: "Mot de passe",
-                    obscureText: true,
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Mot de passe oublié ?",
-                    style: TextStyle(color: Colors.grey, fontSize: 13),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (_) {
-                          return Container(
-                            padding: EdgeInsets.all(24),
-                            width: double.infinity,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              spacing: 24,
-                              children: [
-                                Text(
-                                  "Réinitialiser mot de passe",
-                                  style: TextStyle(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.tertiary,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+          child: SingleChildScrollView(
+            child: Column(
+              spacing: 24,
+              children: [
+                Text(
+                  "Connectez-vous ou\ncréez un compte.",
+                  style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+                ),
+                Column(
+                  spacing: 3,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Adresse e-mail",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    CustomTextField(
+                      emailController: emailController,
+                      hintText: "john.doe@gmail.com",
+                      onChanged: (value) {
+                        emailController.text = value;
+                        if (_errorMessage != null) {
+                          setState(() {
+                            _errorMessage = null;
+                          });
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                Column(
+                  spacing: 3,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Mot de passe",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    CustomTextField(
+                      emailController: passwordController,
+                      hintText: "Mot de passe",
+                      obscureText: true,
+                      onChanged: (value) {
+                        passwordController.text = value;
+                        if (_errorMessage != null) {
+                          setState(() {
+                            _errorMessage = null;
+                          });
+                        }
+                      },
+                    ),
+                    if (_errorMessage != null)
+                      Text(_errorMessage!, style: TextStyle(color: Colors.red)),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Mot de passe oublié ?",
+                      style: TextStyle(color: Colors.grey, fontSize: 13),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (_) {
+                            return Container(
+                              padding: EdgeInsets.all(24),
+                              width: double.infinity,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                spacing: 24,
+                                children: [
+                                  Text(
+                                    "Réinitialiser mot de passe",
+                                    style: TextStyle(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.tertiary,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "Entrez l’adresse email associée à votre compte. Nous vous enverrons un email de réinitialisation sur celle-ci.",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500,
+                                  Text(
+                                    "Entrez l’adresse email associée à votre compte. Nous vous enverrons un email de réinitialisation sur celle-ci.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                ),
-                                Column(
-                                  spacing: 3,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Adresse e-mail",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
+                                  Column(
+                                    spacing: 3,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Adresse e-mail",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                    ),
-                                    CustomTextField(
-                                      emailController: emailController,
-                                      hintText: "john.doe@gmail.com",
-                                      obscureText: true,
-                                    ),
-                                  ],
-                                ),
-                                CustomButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    showDialog(
-                                      context: context,
-                                      builder: (_) {
-                                        return PopupModal(
-                                          title: "Email envoyé",
-                                          content:
-                                              "Vous avez reçu un email afin de réinitialiser votre mot de passe.",
-                                          ctaText: "Fermer",
-                                        );
-                                      },
-                                    );
-                                  },
-                                  text: "Réinitialiser",
-                                ),
-                                const SizedBox(height: 16),
-                              ],
-                            ),
+                                      CustomTextField(
+                                        emailController: emailController,
+                                        hintText: "john.doe@gmail.com",
+                                      ),
+                                    ],
+                                  ),
+                                  CustomButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          return PopupModal(
+                                            title: "Email envoyé",
+                                            content:
+                                                "Vous avez reçu un email afin de réinitialiser votre mot de passe.",
+                                            ctaText: "Fermer",
+                                          );
+                                        },
+                                      );
+                                    },
+                                    text: "Réinitialiser",
+                                  ),
+                                  const SizedBox(height: 16),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        "Réinitialiser",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary,
+                          decoration: TextDecoration.underline,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                CustomButton(
+                  onPressed: () async {
+                    try {
+                      var userData = await connectionService
+                          .singInViaFirebaseEmailPassword(
+                            emailController.text,
+                            passwordController.text,
                           );
-                        },
-                      );
-                    },
-                    child: Text(
-                      "Réinitialiser",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        decoration: TextDecoration.underline,
-                        fontSize: 13,
+                      user.setUserFromCredentials(userData);
+                      if (mounted) {
+                        Navigator.pushNamedAndRemoveUntil(
+                          // ignore: use_build_context_synchronously
+                          context,
+                          '/home',
+                          (route) => false,
+                        );
+                      }
+                    } catch (e) {
+                      setState(() {
+                        _errorMessage = e.toString().replaceAll(
+                          'Exception: ',
+                          '',
+                        );
+                      });
+                    }
+                  },
+                  text: "Connexion",
+                ),
+                const SizedBox(height: 1),
+                Divider(
+                  color: Colors.grey,
+                  indent: 150,
+                  endIndent: 150,
+                  thickness: 2,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Pas de compte ?",
+                      style: TextStyle(color: Colors.grey, fontSize: 13),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/register');
+                      },
+                      child: Text(
+                        "Créé maintenant",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary,
+                          decoration: TextDecoration.underline,
+                          fontSize: 13,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              CustomButton(onPressed: () {}, text: "Connexion"),
-              const SizedBox(height: 1),
-              Divider(
-                color: Colors.grey,
-                indent: 150,
-                endIndent: 150,
-                thickness: 2,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Pas de compte ?",
-                    style: TextStyle(color: Colors.grey, fontSize: 13),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/register');
-                    },
-                    child: Text(
-                      "Créé maintenant",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        decoration: TextDecoration.underline,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

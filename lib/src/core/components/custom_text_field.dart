@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatefulWidget {
   final TextEditingController emailController;
   final String hintText;
+  final Function(String)? onChanged;
   final bool obscureText;
   const CustomTextField({
     super.key,
     required this.emailController,
     required this.hintText,
-    required this.obscureText,
+    this.obscureText = false,
+    this.onChanged,
   });
 
   @override
@@ -32,6 +34,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
         showCursor: true,
         cursorColor: Theme.of(context).colorScheme.onPrimary,
         obscureText: widget.obscureText ? _isObscured : false,
+        onChanged: (value) {
+          if (widget.onChanged != null) {
+            widget.onChanged!(value);
+          }
+        },
         decoration: InputDecoration(
           fillColor: Theme.of(context).colorScheme.surface,
           filled: true,

@@ -61,4 +61,9 @@ class UserModel {
       profilePicture: profilePicture ?? this.profilePicture,
     );
   }
+
+  @override
+  String toString() {
+    return 'UserModel{id: $id, email: $email, displayName: $displayName, firstName: $firstName, lastName: $lastName, profilePicture: ${profilePicture?.path}}';
+  }
 }

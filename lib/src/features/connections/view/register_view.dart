@@ -175,46 +175,46 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                                   CustomButton(
                                     text: "Continuer",
                                     onPressed: gcvu
-                                        ? () {
+                                        ? () async {
                                             try {
-                                              connectionService
+                                              var cred = await connectionService
                                                   .signUpViaFirebaseEmailPassword(
                                                     emailController.text,
                                                     passwordController.text,
-                                                  )
-                                                  .then((cred) {
-                                                    user.setUserFromCredentials(
-                                                      cred,
-                                                    );
-                                                  });
+                                                  );
+                                              user.setUserFromCredentials(cred);
+
+                                              // ignore: use_build_context_synchronously
+                                              Navigator.of(context).pop();
+                                              showDialog(
+                                                // ignore: use_build_context_synchronously
+                                                context: context,
+                                                builder: (_) {
+                                                  return PopupModal(
+                                                    title:
+                                                        "Vérifiez votre boîte mail",
+                                                    content:
+                                                        "Un email de vérification vous a été envoyé à l’adresse ${anonymousEmail(emailController.text)}",
+                                                    ctaText: "Fermer",
+                                                    onPressed: (newContext) {
+                                                      Navigator.pop(newContext);
+                                                      Navigator.pushNamed(
+                                                        newContext,
+                                                        '/register_details',
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                              );
                                             } catch (e) {
                                               if (mounted) {
+                                                // ignore: use_build_context_synchronously
                                                 Navigator.of(context).pop();
                                               }
                                               _errorText = e.toString();
                                               setState(() {});
                                               return;
                                             }
-                                            Navigator.of(context).pop();
-                                            showDialog(
-                                              context: context,
-                                              builder: (_) {
-                                                return PopupModal(
-                                                  title:
-                                                      "Vérifiez votre boîte mail",
-                                                  content:
-                                                      "Un email de vérification vous a été envoyé à l’adresse ${anonymousEmail(emailController.text)}",
-                                                  ctaText: "Fermer",
-                                                  onPressed: (newContext) {
-                                                    Navigator.pop(newContext);
-                                                    Navigator.pushNamed(
-                                                      newContext,
-                                                      '/register_details',
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                            );
                                           }
                                         : null,
                                   ),
