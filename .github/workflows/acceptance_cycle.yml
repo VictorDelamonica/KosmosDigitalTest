@@ -42,8 +42,7 @@ jobs:
           flutter-version: 3.35.7
 
       - name: Run integration tests
-        run: echo "Running integration tests 🧪"
-      #        run: flutter test test/integrations
+        run: flutter test test/integration
 
       - name: Run component tests
         run: echo "Running component tests 🧪"
