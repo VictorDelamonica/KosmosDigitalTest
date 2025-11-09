@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyDiPc5kH67EVUQJx6RrII_xcL1kYXQmv3g</string>
+	<key>GCM_SENDER_ID</key>
+	<string>347027909651</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.monikode.kosmosDigitalTest</string>
+	<key>PROJECT_ID</key>
+	<string>kosmos-digital-test</string>
+	<key>STORAGE_BUCKET</key>
+	<string>kosmos-digital-test.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:347027909651:ios:6d8658e851d388dd8ce3e6</string>
+</dict>
+</plist>

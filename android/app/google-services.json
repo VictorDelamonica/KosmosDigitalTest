@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "347027909651",
+    "project_id": "kosmos-digital-test",
+    "storage_bucket": "kosmos-digital-test.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:347027909651:android:f34558fcada144008ce3e6",
+        "android_client_info": {
+          "package_name": "com.monikode.kosmos_digital_test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_L5wfN9KLQp-XVkE4QTA3_Os8Fgh1xfc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
