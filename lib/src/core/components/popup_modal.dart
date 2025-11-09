@@ -9,12 +9,14 @@ class PopupModal extends StatefulWidget {
   final String title;
   final String content;
   final String ctaText;
+  final String? secondaryCtaText;
   final Function(BuildContext context)? onPressed;
   const PopupModal({
     super.key,
     required this.title,
     required this.content,
     required this.ctaText,
+    this.secondaryCtaText,
     this.onPressed,
   });
 
@@ -37,7 +39,7 @@ class _PopupModalState extends State<PopupModal> {
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 14,
-          color: Colors.grey,
+          color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.7),
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -51,6 +53,22 @@ class _PopupModalState extends State<PopupModal> {
             }
           },
         ),
+        if (widget.secondaryCtaText != null)
+          Center(
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                widget.secondaryCtaText!,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.tertiary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }

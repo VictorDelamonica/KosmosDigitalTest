@@ -8,6 +8,7 @@ import 'package:kosmos_digital_test/src/features/connections/view/register_view.
 import 'package:kosmos_digital_test/src/features/home/view/home_view.dart';
 import 'package:kosmos_digital_test/src/features/post/view/add_post.dart';
 import 'package:kosmos_digital_test/src/features/post/view/post_details_view.dart';
+import 'package:kosmos_digital_test/src/features/profile/view/profile_view.dart';
 
 import 'firebase_options.dart';
 
@@ -101,6 +102,8 @@ class MyApp extends StatelessWidget {
               builder: (context) =>
                   PostDetailsView(settings.arguments as String),
             );
+          case '/profile':
+            return MaterialPageRoute(builder: (context) => const ProfileView());
           default:
             return MaterialPageRoute(
               builder: (context) =>

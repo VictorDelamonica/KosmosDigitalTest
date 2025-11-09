@@ -145,7 +145,10 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                                           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam facilisis ex ex, nec pretium ante mollis id. Nullam lorem magna, malesuada sit amet nisi ut, congue lobortis turpis. Nulla pellentesque libero vitae mollis facilisis. Nulla auctor diam posuere aliquam scelerisque. Curabitur id sodales diam. Aliquam ut bibendum mi. Proin id ipsum sed nisl commodo dapibus. Aliquam eleifend mollis ipsum, vel rhoncus mauris. In a neque a urna vulputate elementum non sed quam. Ut in faucibus ante.\n\nPellentesque non dolor consectetur, mollis nunc id, tincidunt orci. Suspendisse accumsan odio nec nunc mattis maximus. Donec id varius orci, ut eleifend metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Suspendisse potenti. In non sagittis nunc. In lectus ipsum, suscipit vitae iaculis a, sagittis eu mauris. Nam at finibus eros. Sed congue efficitur quam, ultricies rutrum diam accumsan quis. Maecenas finibus ex eu efficitur maximus. Vivamus in erat laoreet, malesuada mi ut, suscipit tortor. Ut euismod iaculis velit, et euismod dolor semper ac. Aliquam bibendum, nulla ac semper volutpat, arcu urna sagittis nulla, non vehicula ante neque eu velit. Duis a pharetra felis. Donec sed luctus metus. Duis feugiat risus eu tortor tempus, id fermentum felis dictum.",
                                           style: TextStyle(
                                             fontSize: 16,
-                                            color: Colors.grey,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary
+                                                .withValues(alpha: 0.7),
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
@@ -182,7 +185,9 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                                                     emailController.text,
                                                     passwordController.text,
                                                   );
-                                              user.setUserFromCredentials(cred);
+                                              await user.setUserFromCredentials(
+                                                cred,
+                                              );
 
                                               // ignore: use_build_context_synchronously
                                               Navigator.of(context).pop();

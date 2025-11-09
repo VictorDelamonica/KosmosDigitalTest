@@ -3,6 +3,7 @@
 // Created by MoniK.
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kosmos_digital_test/src/features/connections/model/user_model.dart';
@@ -25,11 +26,12 @@ class UserProvider extends StateNotifier<UserModel> {
         ),
       );
 
-  void setUser(UserModel user) {
+  Future<void> setUser(UserModel user) async {
     state = user;
+    await loadUserData();
   }
 
-  void setUserFromCredentials(UserCredential credentials) {
+  Future<void> setUserFromCredentials(UserCredential credentials) async {
     final firebaseUser = credentials.user;
     if (firebaseUser != null) {
       state = UserModel(
@@ -38,14 +40,17 @@ class UserProvider extends StateNotifier<UserModel> {
         displayName: firebaseUser.displayName ?? 'NO_NAME',
       );
     }
+    await saveUserData();
   }
 
   Future<void> updateUserDetails({
+    String? email,
     String? firstName,
     String? lastName,
     XFile? profilePicture,
   }) async {
     state = state.copyWith(
+      email: email ?? state.email,
       firstName: firstName ?? state.firstName,
       lastName: lastName ?? state.lastName,
       profilePicture: profilePicture ?? state.profilePicture,
@@ -57,7 +62,7 @@ class UserProvider extends StateNotifier<UserModel> {
     return state;
   }
 
-  void logout() {
+  void logout(BuildContext context) {
     state = UserModel(
       id: '',
       displayName: '',
@@ -66,6 +71,9 @@ class UserProvider extends StateNotifier<UserModel> {
       email: '',
     );
     ConnectionService().logout();
+    Navigator.of(
+      context,
+    ).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
   }
 
   Future<void> loadUserData() async {
@@ -100,5 +108,27 @@ class UserProvider extends StateNotifier<UserModel> {
     if (state.profilePicture != null) {
       await prefs.setString('user_profile_picture', state.profilePicture!.path);
     }
+  }
+
+  Future<void> clearUserData() async {
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user_id');
+    await prefs.remove('user_email');
+    await prefs.remove('user_display_name');
+    await prefs.remove('user_first_name');
+    await prefs.remove('user_last_name');
+    await prefs.remove('user_profile_picture');
+  }
+
+  Future<void> removeUser() async {
+    state = UserModel(
+      id: '',
+      displayName: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+    );
+    ConnectionService().delete();
+    await clearUserData();
   }
 }

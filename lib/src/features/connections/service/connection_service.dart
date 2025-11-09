@@ -42,6 +42,7 @@ class ConnectionService {
     if (userCredential.user == null) {
       throw Exception("Utilisateur non créé; veuillez réessayer.");
     }
+    await ConnectionService().sendEmailVerification();
     return userCredential;
   }
 
@@ -51,5 +52,18 @@ class ConnectionService {
 
   bool isUserLoggedIn() {
     return FirebaseAuth.instance.currentUser != null;
+  }
+
+  void delete() {
+    FirebaseAuth.instance.currentUser?.delete();
+    FirebaseAuth.instance.signOut();
+  }
+
+  Future<void> updateEmail(String newEmail) async {
+    await FirebaseAuth.instance.currentUser?.verifyBeforeUpdateEmail(newEmail);
+  }
+
+  Future<void> sendEmailVerification() async {
+    await FirebaseAuth.instance.currentUser?.sendEmailVerification();
   }
 }

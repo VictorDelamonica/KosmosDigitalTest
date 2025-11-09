@@ -161,11 +161,19 @@ class _RegisterDetailsViewState extends ConsumerState<RegisterDetailsView> {
                                   children: [
                                     Icon(
                                       Icons.cloud_upload_outlined,
-                                      color: Colors.grey,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary
+                                          .withValues(alpha: 0.7),
                                     ),
                                     Text(
                                       "Appuyez pour choisir une photo",
-                                      style: TextStyle(color: Colors.grey),
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary
+                                            .withValues(alpha: 0.7),
+                                      ),
                                     ),
                                   ],
                                 ),

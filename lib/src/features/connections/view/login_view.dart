@@ -100,7 +100,12 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   children: [
                     Text(
                       "Mot de passe oublié ?",
-                      style: TextStyle(color: Colors.grey, fontSize: 13),
+                      style: TextStyle(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onPrimary.withValues(alpha: 0.7),
+                        fontSize: 13,
+                      ),
                     ),
                     TextButton(
                       onPressed: () {
@@ -129,7 +134,10 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color: Colors.grey,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary
+                                          .withValues(alpha: 0.7),
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -194,7 +202,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             emailController.text,
                             passwordController.text,
                           );
-                      user.setUserFromCredentials(userData);
+                      await user.setUserFromCredentials(userData);
+                      await user.loadUserData();
                       if (mounted) {
                         Navigator.pushNamedAndRemoveUntil(
                           // ignore: use_build_context_synchronously
@@ -216,7 +225,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 ),
                 const SizedBox(height: 1),
                 Divider(
-                  color: Colors.grey,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onPrimary.withValues(alpha: 0.7),
                   indent: 150,
                   endIndent: 150,
                   thickness: 2,
@@ -226,7 +237,12 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   children: [
                     Text(
                       "Pas de compte ?",
-                      style: TextStyle(color: Colors.grey, fontSize: 13),
+                      style: TextStyle(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onPrimary.withValues(alpha: 0.7),
+                        fontSize: 13,
+                      ),
                     ),
                     TextButton(
                       onPressed: () {

@@ -10,6 +10,7 @@ class CustomTextField extends StatefulWidget {
   final Function(String)? onChanged;
   final bool obscureText;
   final double? height;
+  final int maxLines;
   const CustomTextField({
     super.key,
     required this.textController,
@@ -17,6 +18,7 @@ class CustomTextField extends StatefulWidget {
     this.obscureText = false,
     this.onChanged,
     this.height,
+    this.maxLines = 1,
   });
 
   @override
@@ -29,13 +31,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: widget.height,
+      height: widget.height ?? 56,
       child: Material(
         elevation: 3,
         borderRadius: BorderRadius.circular(8),
         child: TextField(
           controller: widget.textController,
           showCursor: true,
+          maxLines: widget.maxLines,
           cursorColor: Theme.of(context).colorScheme.onPrimary,
           obscureText: widget.obscureText ? _isObscured : false,
           onChanged: (value) {
@@ -56,7 +59,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 ? IconButton(
                     icon: Icon(
                       _isObscured ? Icons.visibility : Icons.visibility_off,
-                      color: Colors.grey,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onPrimary.withValues(alpha: 0.7),
                     ),
                     onPressed: () {
                       setState(() {
@@ -67,7 +72,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 : null,
             hintText: widget.hintText,
             hintStyle: TextStyle(
-              color: Colors.grey,
+              color: Theme.of(
+                context,
+              ).colorScheme.onPrimary.withValues(alpha: 0.7),
               fontSize: 13,
               fontWeight: FontWeight.w500,
             ),

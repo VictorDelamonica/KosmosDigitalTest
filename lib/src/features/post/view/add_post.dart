@@ -36,114 +36,173 @@ class _AddPostState extends ConsumerState<AddPost> {
       body: PageView(
         controller: _pageController,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 24,
-              children: [
-                Text(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Text(
                   "Choisissez une image",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                DottedBorder(
-                  borderType: BorderType.RRect,
-                  radius: Radius.circular(8),
-                  dashPattern: [8, 4],
-                  color: Colors.grey,
-                  strokeWidth: 2,
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.65,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(8),
-                      onTap: () async {
-                        _profilePicture = await showModalBottomSheet<File>(
-                          context: context,
-                          builder: (_) {
-                            return Padding(
-                              padding: const EdgeInsets.all(24.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                spacing: 16,
-                                children: [
-                                  CustomButton(
-                                    onPressed: () {
-                                      final ImagePicker picker = ImagePicker();
-                                      picker
-                                          .pickImage(
-                                            source: ImageSource.gallery,
-                                          )
-                                          .then((pickedFile) {
-                                            if (pickedFile != null) {
-                                              Navigator.pop(
-                                                // ignore: use_build_context_synchronously
-                                                context,
-                                                File(pickedFile.path),
-                                              );
-                                            }
-                                          });
-                                    },
-                                    text: "Depuis la galerie",
-                                  ),
-                                  CustomButton(
-                                    onPressed: () async {
-                                      final ImagePicker picker = ImagePicker();
-                                      final XFile? pickedFile = await picker
-                                          .pickImage(
-                                            source: ImageSource.camera,
-                                          );
-                                      if (pickedFile != null) {
-                                        WidgetsBinding.instance
-                                            .addPostFrameCallback((_) {
-                                              if (!mounted) return;
-                                              Navigator.pop(
-                                                context,
-                                                File(pickedFile.path),
-                                              );
-                                            });
-                                      }
-                                    },
-                                    text: "Prendre une photo",
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                        setState(() {});
-                      },
-                      child: _profilePicture?.path != null
-                          ? ClipRRect(
+              ),
+              Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 16),
+                        DottedBorder(
+                          borderType: BorderType.RRect,
+                          radius: Radius.circular(8),
+                          dashPattern: [8, 4],
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onPrimary.withValues(alpha: 0.7),
+                          strokeWidth: 2,
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.65,
+                            child: InkWell(
                               borderRadius: BorderRadius.circular(8),
-                              child: Image.file(
-                                File(_profilePicture!.path),
-                                height: 108,
-                                width: double.infinity,
-                                fit: BoxFit.fitHeight,
-                              ),
-                            )
-                          : SizedBox(
-                              height: 108,
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.cloud_upload_outlined,
-                                      color: Colors.grey,
+                              onTap: () async {
+                                _profilePicture = await showModalBottomSheet<File>(
+                                  context: context,
+                                  builder: (_) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(24.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        spacing: 16,
+                                        children: [
+                                          CustomButton(
+                                            onPressed: () {
+                                              final ImagePicker picker =
+                                                  ImagePicker();
+                                              picker
+                                                  .pickImage(
+                                                    source: ImageSource.gallery,
+                                                  )
+                                                  .then((pickedFile) {
+                                                    if (pickedFile != null) {
+                                                      Navigator.pop(
+                                                        // ignore: use_build_context_synchronously
+                                                        context,
+                                                        File(pickedFile.path),
+                                                      );
+                                                    }
+                                                  });
+                                            },
+                                            text: "Depuis la galerie",
+                                          ),
+                                          CustomButton(
+                                            onPressed: () async {
+                                              final ImagePicker picker =
+                                                  ImagePicker();
+                                              final XFile? pickedFile =
+                                                  await picker.pickImage(
+                                                    source: ImageSource.camera,
+                                                  );
+                                              if (pickedFile != null) {
+                                                WidgetsBinding.instance
+                                                    .addPostFrameCallback((_) {
+                                                      if (!mounted) return;
+                                                      Navigator.pop(
+                                                        context,
+                                                        File(pickedFile.path),
+                                                      );
+                                                    });
+                                              }
+                                            },
+                                            text: "Prendre une photo",
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                                setState(() {});
+                              },
+                              child: _profilePicture?.path != null
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.file(
+                                        File(_profilePicture!.path),
+                                        height: 108,
+                                        width: double.infinity,
+                                        fit: BoxFit.fitHeight,
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      height: 108,
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.cloud_upload_outlined,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary
+                                                  .withValues(alpha: 0.7),
+                                            ),
+                                            Text(
+                                              "Appuyez pour choisir une photo",
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary
+                                                    .withValues(alpha: 0.7),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                    Text(
-                                      "Appuyez pour choisir une photo",
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                CustomButton(
+                  if (_profilePicture != null) ...[
+                    Positioned(
+                      top: 0,
+                      right: 8,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(999),
+                        onTap: () {
+                          setState(() {
+                            _profilePicture = null;
+                          });
+                        },
+                        child: Container(
+                          width: 34,
+                          height: 34,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          padding: const EdgeInsets.all(4.0),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.red,
+                            child: const Icon(
+                              Icons.delete_outline_rounded,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: CustomButton(
                   text: "Suivant",
                   onPressed: _profilePicture == null
                       ? null
@@ -154,8 +213,8 @@ class _AddPostState extends ConsumerState<AddPost> {
                           );
                         },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -171,6 +230,7 @@ class _AddPostState extends ConsumerState<AddPost> {
                   textController: _textController,
                   hintText: "Décrivez votre post...",
                   height: MediaQuery.of(context).size.height * 0.65,
+                  maxLines: 999,
                   onChanged: (value) {
                     setState(() {
                       _textController.text = value;
