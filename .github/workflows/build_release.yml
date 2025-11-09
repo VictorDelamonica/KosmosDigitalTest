@@ -1,0 +1,87 @@
+name: Build and Release APK
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    name: Build APK and Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0  # Fetch all history for all tags and branches
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.7'
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Get previous tag
+        id: previoustag
+        run: |
+          # Get all tags sorted by version
+          TAGS=$(git tag -l "v*.*.*" --sort=-v:refname)
+          CURRENT_TAG=${GITHUB_REF#refs/tags/}
+
+          # Get the previous tag (second in the list)
+          PREVIOUS_TAG=$(echo "$TAGS" | sed -n '2p')
+
+          if [ -z "$PREVIOUS_TAG" ]; then
+            echo "No previous tag found, using initial commit"
+            PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
+          fi
+
+          echo "previous_tag=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
+          echo "current_tag=$CURRENT_TAG" >> $GITHUB_OUTPUT
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          CURRENT_TAG="${{ steps.previoustag.outputs.current_tag }}"
+          PREVIOUS_TAG="${{ steps.previoustag.outputs.previous_tag }}"
+
+          echo "## What's Changed" > release_notes.md
+          echo "" >> release_notes.md
+
+          # Get commits between tags
+          git log $PREVIOUS_TAG..$CURRENT_TAG --pretty=format:"- %s (%h)" >> release_notes.md
+
+          echo "" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/$PREVIOUS_TAG...$CURRENT_TAG" >> release_notes.md
+
+          cat release_notes.md
+
+      - name: Rename APK
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/kosmos-digital-test-$TAG_NAME.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: release_notes.md
+          files: |
+            build/app/outputs/flutter-apk/kosmos-digital-test-${{ steps.previoustag.outputs.current_tag }}.apk
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
